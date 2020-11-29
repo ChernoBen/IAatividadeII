@@ -1,0 +1,8 @@
+*.idea
+*.sqlite3
+*pyc
+.DS_Store
+media
+.env
+*.covid19
+*.INFLUD-23-11-2020
