@@ -13,4 +13,11 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
 
-dados = pd.read_csv('filtered_dataset', sep= ';') 
+dados = pd.read_csv('filtered_dataset', sep= ';')
+'''
+1-cura
+2-obito
+3-obito outras causas
+9-ignorado
+''' 
+clss = dados[['NU_IDADE_N','EVOLUCAO']]
