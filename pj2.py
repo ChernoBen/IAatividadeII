@@ -44,6 +44,14 @@ previsoes
 unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 quantidade2
 
+#geração do grafico com os clusters gerados, considerando para um (previsoes 0,1 ou 2)
+#Usamos somente as colunas 0 e 1 da base de dados original para termos 2 dimensoes
+plt.scatter(clss[previsoes == 0, 0],clss[previsoes == 0, 1],
+            c = 'green',label = 'obtios')
+plt.scatter(clss[previsoes == 1, 0],clss[previsoes == 1, 1],
+            c = 'red',label = 'recuperados')
+
+plt.legend()
 
    
 
