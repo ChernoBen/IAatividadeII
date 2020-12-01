@@ -40,6 +40,10 @@ centroides
 previsoes = cluster.labels_
 previsoes 
 
+#contagem dos registros por classe
+unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
+quantidade2
+
 
    
 
