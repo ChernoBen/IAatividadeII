@@ -36,4 +36,10 @@ y_kmeans = cluster.predict(clss)
 centroides = cluster.cluster_centers_
 centroides
 
+#visualização dos grupos que cada reistro foi associado
+previsoes = cluster.labels_
+previsoes 
+
+
+   
 
