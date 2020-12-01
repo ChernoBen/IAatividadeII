@@ -21,8 +21,12 @@ dados = pd.read_csv('filtered_dataset', sep= ';')
 9-ignorado
 ''' 
 clss = dados[['EVOLUCAO','NU_IDADE_N']].fillna(0)
+'''removendo tudo que nao seja cura e obito'''
+clss = clss.drop(clss[clss['EVOLUCAO'] > 2 ].index)
+'''removendo valores nao informados'''
+clss = clss.drop(clss[clss['EVOLUCAO'] < 1 ].index)
 ''' .fillna(0) troca valores Nan por 0'''
-kmeans = KMeans(n_clusters=5,verbose=5)
+kmeans = KMeans(n_clusters=2,verbose=2)
 kmeans.fit(clss)
 y_kmeans = kmeans.predict(clss)
 
