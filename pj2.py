@@ -21,7 +21,7 @@ from sklearn.cluster import KMeans
 dados = pd.read_csv('filtered_dataset', sep= ';')
 
 ''' .fillna(0) troca valores Nan por 0'''
-clss = dados[['EVOLUCAO','NU_IDADE_N']].fillna(0)
+clss = dados[['NU_IDADE_N','EVOLUCAO']].fillna(0)
 '''removendo tudo que nao seja cura e obito'''
 clss = clss.drop(clss[clss['EVOLUCAO'] > 2 ].index)
 '''removendo valores nao informados'''
@@ -96,7 +96,7 @@ for i in range(len(centers_his)):
     plt.scatter(classe[:, 0], classe[:, 1], c=labels,label = 'Obitos',
                 s=50, cmap='rainbow');
     plt.scatter(centers[:, 0], centers[:, 1], c='black', label='Curados',s=200, alpha=0.5);
-    plt.savefig('{}.png'.format(i))
+    #plt.savefig('{}.png'.format(i))
 
 
 
