@@ -18,7 +18,7 @@ from sklearn.cluster import KMeans
 9-ignorado
 ''' 
 
-dados = pd.read_csv('filtered_dataset', sep= ';')
+dados = pd.read_csv('https://raw.githubusercontent.com/ChernoBen/IAatividadeII/main/filtered_dataset', sep= ';')
 
 ''' .fillna(0) troca valores Nan por 0'''
 clss = dados[['NU_IDADE_N','EVOLUCAO']].fillna(0)
@@ -45,6 +45,9 @@ previsoes
 unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 quantidade2
 
+#matriz de confusão
+resultados = confusion_matrix(classe[0],previsoes)
+
 #geração do grafico com os clusters gerados, considerando para um (previsoes 0,1 ou 2)
 #Usamos somente as colunas 0 e 1 da base de dados original para termos 2 dimensoes
 '''plt.scatter(clss[previsoes == 0, 0],clss[previsoes == 0, 1],
@@ -54,6 +57,7 @@ plt.scatter(clss[previsoes == 1, 0],clss[previsoes == 1, 1],
 
 plt.legend()''' 
 #tentativa plot
+
 
 from sklearn.metrics import pairwise_distances_argmin
 
