@@ -93,9 +93,10 @@ for i in range(len(centers_his)):
     labels = labels_his[i]
     fig = plt.figure(figsize=(7, 5))
     fig.set_tight_layout(True)
-    plt.scatter(classe[:, 0], classe[:, 1], c=labels,label = 'Obitos',
+    plt.scatter(classe[:, 0], classe[:, 1], c=labels,
                 s=50, cmap='rainbow');
-    plt.scatter(centers[:, 0], centers[:, 1], c='black', label='Curados',s=200, alpha=0.5);
+    plt.scatter(centers[:, 0], centers[:, 1], c='black',
+                s=200, alpha=0.5);
     #plt.savefig('{}.png'.format(i))
 
 
