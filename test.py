@@ -25,7 +25,7 @@ tranformar cada instancia de cada coluna em labels
 talvez remover coluna grupo de risco 
 ''' 
 
-dados = pd.read_csv('new_dataset', sep= ';')
+dados = pd.read_csv('https://raw.githubusercontent.com/ChernoBen/IAatividadeII/main/new_dataset', sep= ';')
 teste = dados
 #primeiro metodo para plot/df tipo int
 teste2 = teste.values
@@ -33,23 +33,19 @@ teste2 = teste.values
 dados  = dados.drop(dados[dados['EVOLUCAO'] > 2 ].index)
 dados  = dados.drop(dados[dados['EVOLUCAO'] < 1  ].index)
 
-
-#numpy array
-teste3 = dados.to_numpy()
-arr = dados['EVOLUCAO'].values
     
 '''tranformando valores em rotulos'''
 #tst = teste['EVOLUCAO'].apply(preprocessing.LabelEncoder().fit_transform)        
 teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
-#primeiro metodo para plot/df tipo int
-teste2 = teste.values
 
 # visualização de quantos registros existem por classe
 unicos,quantidade = np.unique(teste,return_counts=True)
-
+teste3 = teste.to_numpy()
+arr = teste['EVOLUCAO'].values
 #instanciando KMeans/ criando agrupamentos
 cluster = KMeans(n_clusters=2)
 cluster.fit(teste)
+pred = cluster.predict(teste)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
 centroides = cluster.cluster_centers_
@@ -61,45 +57,52 @@ previsoes = cluster.labels_
 unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 
 #geração da matriz de contingencia para comparar os grupos com a base de dados
-resultados = confusion_matrix(arr,previsoes)
+resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
  
 '''-----------------------''' 
-'''
-plt.scatter(teste3[previsoes == 0, 1],teste3[previsoes == 0, 23],
-            c = 'green',label = 'Obitos')
-plt.scatter(teste3[previsoes == 1, 1],teste3[previsoes == 1, 13],
-            c = 'red',label = 'Recuperados')
 
-plt.scatter(teste3[previsoes == 2, 1],teste3[previsoes == 2, 23],
-            c = 'blue',label = '')
-plt.scatter(teste3[previsoes == 3, 1],teste3[previsoes == 3, 23],
-            c = 'black',label = 'Recuperados')
-plt.scatter(teste3[previsoes == 4, 1],teste3[previsoes == 4, 23],
-            c = 'yellow',label = 'Recuperados')
-plt.scatter(teste3[previsoes == 5, 1],teste3[previsoes == 5, 23],
-            c = 'pink',label = 'Recuperados')
+from sklearn.metrics import pairwise_distances_argmin
 
-plt.legend()
-'''
+def find_clusters(X, n_clusters, rseed=2):
+    # 1. Randomly choose clusters
+    rng = np.random.RandomState(rseed)
+    i = rng.permutation(X.shape[0])[:n_clusters]
+    centers = X[i]
+    
+    centers_his = []
+    labels_his = []
+    
+    while(True):
+        # 2a. Assign labels based on closest center
+        labels = pairwise_distances_argmin(X, centers)
+        
+        # 2b. Find new centers from means of points
+        new_centers = np.array([X[labels == i].mean(0)
+                                for i in range(n_clusters)])
+        
+        # 2c. Check for convergence
+        if np.all(centers == new_centers):
+            break
+        centers = new_centers
+        
+        centers_his.append(centers)
+        labels_his.append(labels)
+    
+    return centers, labels, centers_his, labels_his
 
+centers, labels, centers_his, labels_his = find_clusters(teste3, 2)
 '''-------------------------'''
-import operator
-from functools import reduce
 
-for i in range(len(centroides)):
-    centers = centroides[i]
-    labels = arr[i]
+
+for i in range(len(centers_his)):
+    centers = centers_his[i]
+    labels = labels_his[i]
     fig = plt.figure(figsize=(7, 5))
     fig.set_tight_layout(True)
-    plt.scatter(teste3[:, 1], teste3[:, 23], c=reduce(operator.add, labels), 
-                cmap=plt.cm.Spectral, s=50);
+    plt.scatter(teste3[:, 0], teste3[:, 1], c=labels,
+                s=50, cmap='rainbow');
     plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5);
     plt.savefig('kmeans_demo/{}.png'.format(i))
-
-
-
-
-
 
 
 
