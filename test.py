@@ -11,6 +11,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from sklearn import preprocessing
 '''
 1-cura
 2-obito
@@ -20,16 +21,11 @@ from sklearn.cluster import KMeans
 tranformar cada instancia de cada coluna em labels 
 ''' 
 
-dados = pd.read_csv('https://raw.githubusercontent.com/ChernoBen/IAatividadeII/main/filtered_dataset', sep= ';')
+dados = pd.read_csv('new_dataset', sep= ';')
 
-''' .fillna(0) troca valores Nan por 0'''
-clss = dados[['NU_IDADE_N','EVOLUCAO']].fillna(0)
-'''removendo tudo que nao seja cura e obito'''
-clss = clss.drop(clss[clss['EVOLUCAO'] > 2 ].index)
-'''removendo valores nao informados'''
-clss = clss.drop(clss[clss['EVOLUCAO'] < 1 ].index)
+'''tranformando valores em rotulos'''        
+teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 
 # visualização de quantos registros existem por classe
-unicos,quantidade = np.unique(clss,return_counts=True)
+unicos,quantidade = np.unique(teste,return_counts=True)
 
-cluster = KMeans(n_cluster)
