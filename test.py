@@ -29,3 +29,20 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 # visualização de quantos registros existem por classe
 unicos,quantidade = np.unique(teste,return_counts=True)
 
+#instanciando KMeans/ criando agrupamentos
+cluster = KMeans(n_clusters=4)
+cluster.fit(teste)
+
+#visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
+centroides = cluster.cluster_centers_
+
+#visualização dos grupos que cada registro foi associado
+previsoes = cluster.labels_
+
+#contagem dos registros por classe
+unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
+
+#geração da matriz de contingencia para comparar os grupos com a base de dados
+resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
+
+#criar plot com base na  evolução e idade
