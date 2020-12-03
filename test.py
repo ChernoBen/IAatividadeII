@@ -24,11 +24,13 @@ tranformar cada instancia de cada coluna em labels
 
 dados = pd.read_csv('new_dataset', sep= ';')
 teste = dados
+
 '''removendo valores diferentes de obitos e cura'''
 teste  = teste.drop(teste[teste['EVOLUCAO'] > 2 ].index)
 teste  = teste.drop(teste[teste['EVOLUCAO'] < 1  ].index)
 
-'''tranformando valores em rotulos'''        
+'''tranformando valores em rotulos'''
+#tst = teste['EVOLUCAO'].apply(preprocessing.LabelEncoder().fit_transform)        
 teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 
 # visualização de quantos registros existem por classe
@@ -50,6 +52,14 @@ unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 #geração da matriz de contingencia para comparar os grupos com a base de dados
 resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
 
-'''--------------------------'''
-
-
+'''--------------------------''' 
+centers = []
+labels = [] 
+for i in range(len(centroides)):
+    centers.append(centroides[i])
+    labels.append(teste['EVOLUCAO'][i])
+    fig = plt.figure(figsize=(7, 5))
+    fig.set_tight_layout(True)
+    plt.scatter(teste['EVOLUCAO'][:], teste['NU_IDADE_N'][:], c=labels,
+                s=50, cmap='rainbow');
+ 
