@@ -33,8 +33,7 @@ teste2 = teste.values
 dados  = dados.drop(dados[dados['EVOLUCAO'] > 2 ].index)
 dados  = dados.drop(dados[dados['EVOLUCAO'] < 1  ].index)
 
-#primeiro metodo para plot/df tipo int
-teste2 = teste.values
+
 #numpy array
 teste3 = dados.to_numpy()
 arr = dados['EVOLUCAO'].values
@@ -42,12 +41,14 @@ arr = dados['EVOLUCAO'].values
 '''tranformando valores em rotulos'''
 #tst = teste['EVOLUCAO'].apply(preprocessing.LabelEncoder().fit_transform)        
 teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
+#primeiro metodo para plot/df tipo int
+teste2 = teste.values
 
 # visualização de quantos registros existem por classe
 unicos,quantidade = np.unique(teste,return_counts=True)
 
 #instanciando KMeans/ criando agrupamentos
-cluster = KMeans(n_clusters=2)
+cluster = KMeans()
 cluster.fit(teste)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
@@ -63,12 +64,12 @@ unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 resultados = confusion_matrix(arr,previsoes)
  
 '''-----------------------''' 
-
+'''
 plt.scatter(teste3[previsoes == 0, 1],teste3[previsoes == 0, 23],
             c = 'green',label = 'Obitos')
-plt.scatter(teste3[previsoes == 1, 1],teste3[previsoes == 1, 23],
+plt.scatter(teste3[previsoes == 1, 1],teste3[previsoes == 1, 13],
             c = 'red',label = 'Recuperados')
-'''
+
 plt.scatter(teste3[previsoes == 2, 1],teste3[previsoes == 2, 23],
             c = 'blue',label = '')
 plt.scatter(teste3[previsoes == 3, 1],teste3[previsoes == 3, 23],
@@ -76,9 +77,11 @@ plt.scatter(teste3[previsoes == 3, 1],teste3[previsoes == 3, 23],
 plt.scatter(teste3[previsoes == 4, 1],teste3[previsoes == 4, 23],
             c = 'yellow',label = 'Recuperados')
 
-'''
-plt.legend()
 
+plt.legend()
+'''
+
+'''-------------------------'''
 
 
 
