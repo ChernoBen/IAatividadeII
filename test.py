@@ -23,6 +23,10 @@ tranformar cada instancia de cada coluna em labels
 ''' 
 
 dados = pd.read_csv('new_dataset', sep= ';')
+teste = dados
+'''removendo valores diferentes de obitos e cura'''
+teste  = teste.drop(teste[teste['EVOLUCAO'] > 2 ].index)
+teste  = teste.drop(teste[teste['EVOLUCAO'] < 1  ].index)
 
 '''tranformando valores em rotulos'''        
 teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
@@ -31,7 +35,7 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 unicos,quantidade = np.unique(teste,return_counts=True)
 
 #instanciando KMeans/ criando agrupamentos
-cluster = KMeans(n_clusters=4)
+cluster = KMeans(n_clusters=2)
 cluster.fit(teste)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
@@ -46,4 +50,6 @@ unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 #geração da matriz de contingencia para comparar os grupos com a base de dados
 resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
 
-#criar plot com base na  evolução e idade
+'''--------------------------'''
+
+
