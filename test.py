@@ -17,6 +17,7 @@ from sklearn import preprocessing
 2-obito
 3-obito outras causas
 9-ignorado
+remover casos de item 3 e 9
 
 tranformar cada instancia de cada coluna em labels 
 ''' 
