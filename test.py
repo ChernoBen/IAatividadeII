@@ -83,14 +83,16 @@ plt.legend()
 '''
 
 '''-------------------------'''
+import operator
+from functools import reduce
 
 for i in range(len(centroides)):
     centers = centroides[i]
-    labels = dados['EVOLUCAO'][i]
+    labels = arr[i]
     fig = plt.figure(figsize=(7, 5))
     fig.set_tight_layout(True)
-    plt.scatter(teste3[:, 1], teste3[:, 23], c=labels,
-                s=50, cmap='rainbow');
+    plt.scatter(teste3[:, 1], teste3[:, 23], c=reduce(operator.add, labels), 
+                cmap=plt.cm.Spectral, s=50);
     plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5);
     plt.savefig('kmeans_demo/{}.png'.format(i))
 
