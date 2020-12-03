@@ -48,7 +48,7 @@ teste2 = teste.values
 unicos,quantidade = np.unique(teste,return_counts=True)
 
 #instanciando KMeans/ criando agrupamentos
-cluster = KMeans()
+cluster = KMeans(n_clusters=2)
 cluster.fit(teste)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
@@ -76,14 +76,23 @@ plt.scatter(teste3[previsoes == 3, 1],teste3[previsoes == 3, 23],
             c = 'black',label = 'Recuperados')
 plt.scatter(teste3[previsoes == 4, 1],teste3[previsoes == 4, 23],
             c = 'yellow',label = 'Recuperados')
-
+plt.scatter(teste3[previsoes == 5, 1],teste3[previsoes == 5, 23],
+            c = 'pink',label = 'Recuperados')
 
 plt.legend()
 '''
 
 '''-------------------------'''
 
-
+for i in range(len(centroides)):
+    centers = centroides[i]
+    labels = dados['EVOLUCAO'][i]
+    fig = plt.figure(figsize=(7, 5))
+    fig.set_tight_layout(True)
+    plt.scatter(teste3[:, 1], teste3[:, 23], c=labels,
+                s=50, cmap='rainbow');
+    plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5);
+    plt.savefig('kmeans_demo/{}.png'.format(i))
 
 
 
