@@ -27,10 +27,14 @@ talvez remover coluna grupo de risco
 
 dados = pd.read_csv('new_dataset', sep= ';')
 teste = dados
-
+#primeiro metodo para plot/df tipo int
+teste2 = teste.values
 '''removendo valores diferentes de obitos e cura'''
 teste  = teste.drop(teste[teste['EVOLUCAO'] > 2 ].index)
 teste  = teste.drop(teste[teste['EVOLUCAO'] < 1  ].index)
+
+#primeiro metodo para plot/df tipo int
+teste2 = teste.values
 
 '''tranformando valores em rotulos'''
 #tst = teste['EVOLUCAO'].apply(preprocessing.LabelEncoder().fit_transform)        
@@ -40,7 +44,7 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 unicos,quantidade = np.unique(teste,return_counts=True)
 
 #instanciando KMeans/ criando agrupamentos
-cluster = KMeans(n_clusters=4)
+cluster = KMeans(n_clusters=5)
 cluster.fit(teste)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
@@ -53,11 +57,10 @@ previsoes = cluster.labels_
 unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 
 #geração da matriz de contingencia para comparar os grupos com a base de dados
-resultados = confusion_matrix(teste[:,23],previsoes)
+resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
 
 '''--------------------------''' 
-#primeiro metodo para plot/df tipo int
-teste2 = teste.values
+
 
 from sklearn.metrics import pairwise_distances_argmin
 
@@ -88,18 +91,17 @@ def find_clusters(X, n_clusters, rseed=2):
     
     return centers, labels, centers_his, labels_his
 
-'''---------------------------'''
-centers, labels, centers_his, labels_his = find_clusters(teste2, 4)
+'''---------------------------
+centers, labels, centers_his, labels_his = find_clusters(teste2, 4)'''
 
-'''-----------------------
+'''-----------------------''' 
 #segundo metodo p/plot
 #geração do grafico com os clusters gerados, considerando para um (previsoes 0,1 ou 2)
 #Usamos somente as colunas 0 e 1 da base de dados original para termos 2 dimensoes
-plt.scatter(iris.data[previsoes == 0, 0],iris.data[previsoes == 0, 1],
-            c = 'green',label = 'Setosa')
-plt.scatter(iris.data[previsoes == 1, 0],iris.data[previsoes == 1, 1],
-            c = 'red',label = 'Versicolor')
-plt.scatter(iris.data[previsoes == 2, 0], iris.data[previsoes == 2, 1],
-            c = 'blue',label = 'Virginica')
-plt.legend()
-''' 
+j = 0
+for j in range(len(quantidade)):
+    plt.scatter(teste['EVOLUCAO'][previsoes[j]],teste['NU_IDADE_N'][previsoes[j]],
+                c = 'green')
+    if j == 10:
+        break
+
