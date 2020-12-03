@@ -30,12 +30,15 @@ teste = dados
 #primeiro metodo para plot/df tipo int
 teste2 = teste.values
 '''removendo valores diferentes de obitos e cura'''
-teste  = teste.drop(teste[teste['EVOLUCAO'] > 2 ].index)
-teste  = teste.drop(teste[teste['EVOLUCAO'] < 1  ].index)
+dados  = dados.drop(dados[dados['EVOLUCAO'] > 2 ].index)
+dados  = dados.drop(dados[dados['EVOLUCAO'] < 1  ].index)
 
 #primeiro metodo para plot/df tipo int
 teste2 = teste.values
-
+#numpy array
+teste3 = dados.to_numpy()
+arr = dados['EVOLUCAO'].values
+    
 '''tranformando valores em rotulos'''
 #tst = teste['EVOLUCAO'].apply(preprocessing.LabelEncoder().fit_transform)        
 teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
@@ -44,7 +47,7 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 unicos,quantidade = np.unique(teste,return_counts=True)
 
 #instanciando KMeans/ criando agrupamentos
-cluster = KMeans(n_clusters=5)
+cluster = KMeans(n_clusters=2)
 cluster.fit(teste)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
@@ -57,51 +60,37 @@ previsoes = cluster.labels_
 unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 
 #geração da matriz de contingencia para comparar os grupos com a base de dados
-resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
-
-'''--------------------------''' 
-
-
-from sklearn.metrics import pairwise_distances_argmin
-
-def find_clusters(X, n_clusters, rseed=2):
-    # 1. Randomly choose clusters
-    rng = np.random.RandomState(rseed)
-    i = rng.permutation(X.shape[0])[:n_clusters]
-    centers = X[i]
-    
-    centers_his = []
-    labels_his = []
-    
-    while(True):
-        # 2a. Assign labels based on closest center
-        labels = pairwise_distances_argmin(X, centers)
-        
-        # 2b. Find new centers from means of points
-        new_centers = np.array([X[labels == i].mean(0)
-                                for i in range(n_clusters)])
-        
-        # 2c. Check for convergence
-        if np.all(centers == new_centers):
-            break
-        centers = new_centers
-        
-        centers_his.append(centers)
-        labels_his.append(labels)
-    
-    return centers, labels, centers_his, labels_his
-
-'''---------------------------
-centers, labels, centers_his, labels_his = find_clusters(teste2, 4)'''
-
+resultados = confusion_matrix(arr,previsoes)
+ 
 '''-----------------------''' 
-#segundo metodo p/plot
-#geração do grafico com os clusters gerados, considerando para um (previsoes 0,1 ou 2)
-#Usamos somente as colunas 0 e 1 da base de dados original para termos 2 dimensoes
-j = 0
-for j in range(len(quantidade)):
-    plt.scatter(teste['EVOLUCAO'][previsoes[j]],teste['NU_IDADE_N'][previsoes[j]],
-                c = 'green')
-    if j == 10:
-        break
+
+plt.scatter(teste3[previsoes == 0, 1],teste3[previsoes == 0, 23],
+            c = 'green',label = 'Obitos')
+plt.scatter(teste3[previsoes == 1, 1],teste3[previsoes == 1, 23],
+            c = 'red',label = 'Recuperados')
+'''
+plt.scatter(teste3[previsoes == 2, 1],teste3[previsoes == 2, 23],
+            c = 'blue',label = '')
+plt.scatter(teste3[previsoes == 3, 1],teste3[previsoes == 3, 23],
+            c = 'black',label = 'Recuperados')
+plt.scatter(teste3[previsoes == 4, 1],teste3[previsoes == 4, 23],
+            c = 'yellow',label = 'Recuperados')
+
+'''
+plt.legend()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
