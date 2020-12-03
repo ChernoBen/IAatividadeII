@@ -12,6 +12,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn import preprocessing
+
 '''
 1-cura
 2-obito
@@ -37,7 +38,7 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 unicos,quantidade = np.unique(teste,return_counts=True)
 
 #instanciando KMeans/ criando agrupamentos
-cluster = KMeans(n_clusters=2)
+cluster = KMeans()
 cluster.fit(teste)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
@@ -53,13 +54,37 @@ unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
 
 '''--------------------------''' 
-centers = []
-labels = [] 
-for i in range(len(centroides)):
-    centers.append(centroides[i])
-    labels.append(teste['EVOLUCAO'][i])
-    fig = plt.figure(figsize=(7, 5))
-    fig.set_tight_layout(True)
-    plt.scatter(teste['EVOLUCAO'][:], teste['NU_IDADE_N'][:], c=labels,
-                s=50, cmap='rainbow');
+
+from sklearn.metrics import pairwise_distances_argmin
+
+def find_clusters(X, n_clusters, rseed=2):
+    # 1. Randomly choose clusters
+    rng = np.random.RandomState(rseed)
+    i = rng.permutation(X.shape[0])[:n_clusters]
+    centers = X[i]
+    
+    centers_his = []
+    labels_his = []
+    
+    while(True):
+        # 2a. Assign labels based on closest center
+        labels = pairwise_distances_argmin(X, centers)
+        
+        # 2b. Find new centers from means of points
+        new_centers = np.array([X[labels == i].mean(0)
+                                for i in range(n_clusters)])
+        
+        # 2c. Check for convergence
+        if np.all(centers == new_centers):
+            break
+        centers = new_centers
+        
+        centers_his.append(centers)
+        labels_his.append(labels)
+    
+    return centers, labels, centers_his, labels_his
+
+'''---------------------------'''
+centers, labels, centers_his, labels_his = find_clusters(teste, 8)
+
  
