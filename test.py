@@ -5,7 +5,7 @@ Created on Wed Dec  2 19:54:59 2020
 @author: Benjamim
 """
 
-from sklearn import datasets
+
 import pandas as pd
 import numpy as np
 from sklearn.metrics import confusion_matrix
@@ -40,11 +40,11 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 # visualização de quantos registros existem por classe
 unicos,quantidade = np.unique(teste,return_counts=True)
 teste3 = teste.to_numpy()
-
+teste4 = teste[['EVOLUCAO','NU_IDADE_N']].values
 #instanciando KMeans/ criando agrupamentos
 cluster = KMeans(n_clusters=2)
-cluster.fit(teste)
-pred = cluster.predict(teste)
+cluster.fit(teste4)
+pred = cluster.predict(teste4)
 
 #visualização dos centroides(agrupamentos ou clusters anteiormente definidos)
 centroides = cluster.cluster_centers_
@@ -56,7 +56,7 @@ previsoes = cluster.labels_
 unicos2, quantidade2 = np.unique(previsoes,return_counts = True)
 
 #geração da matriz de contingencia para comparar os grupos com a base de dados
-resultados = confusion_matrix(teste['EVOLUCAO'],previsoes)
+resultados = confusion_matrix(teste4[:,0],previsoes)
  
 '''-----------------------''' 
 from sklearn.metrics import pairwise_distances_argmin
@@ -84,16 +84,18 @@ def find_clusters(X, n_clusters, rseed=2):
         labels_his.append(labels)
     return centers, labels, centers_his, labels_his
 
-centers, labels, centers_his, labels_his = find_clusters(teste3, 2)
+'''teste3 tem que receber apenas 2 colunas'''
+centers, labels, centers_his, labels_his = find_clusters(teste4, 2)
 '''-------------------------'''
 
-dfm = dados[['EVOLUCAO', 'NU_IDADE_N']].values
+
 for i in range(len(centers_his)):
+    #talves usar os centroides delcarados inicialmente
     centers = centers_his[i]
     labels = labels_his[i]
     fig = plt.figure(figsize=(7, 5))
     fig.set_tight_layout(True)
-    plt.scatter(dfm[:, 0], dfm[:, 1], c=labels,
+    plt.scatter(teste4[:, 0], teste4[:, 1], c=labels,
                 s=50, cmap='rainbow');
     plt.scatter(centers[:, 0], centers[:, 1], c='black', s=200, alpha=0.5);
     plt.savefig('kmeans_demo/{}.png'.format(i))
