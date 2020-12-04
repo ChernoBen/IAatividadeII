@@ -40,8 +40,10 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 # visualização de quantos registros existem por classe
 unicos,quantidade = np.unique(teste,return_counts=True)
 teste3 = teste.to_numpy()
+
 '''talvez idade por outro fator'''
-teste4 = teste[['EVOLUCAO','NU_IDADE_N']].values
+teste4 = teste[['FATOR_RISC','NU_IDADE_N']].values
+
 #instanciando KMeans/ criando agrupamentos
 cluster = KMeans(n_clusters=2)
 cluster.fit(teste4)
@@ -78,6 +80,7 @@ def find_clusters(X, n_clusters, rseed=2):
         new_centers = np.array([X[labels == i].mean(0)
                                 for i in range(n_clusters)])
         # 2c. Check for convergence
+        '''verifica se todos os elementos do array são True e retorna True'''
         if np.all(centers == new_centers):
             break
         centers = new_centers
