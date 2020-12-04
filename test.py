@@ -40,6 +40,7 @@ teste = dados.apply(preprocessing.LabelEncoder().fit_transform)
 # visualização de quantos registros existem por classe
 unicos,quantidade = np.unique(teste,return_counts=True)
 teste3 = teste.to_numpy()
+'''talvez idade por outro fator'''
 teste4 = teste[['EVOLUCAO','NU_IDADE_N']].values
 #instanciando KMeans/ criando agrupamentos
 cluster = KMeans(n_clusters=2)
